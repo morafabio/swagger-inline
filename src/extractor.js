@@ -48,25 +48,29 @@ class Extractor {
         let scopeMatched = false;
 
         lines.some((line) => {
+
             if (route) {
-                if(options && options.scope){
-                    if(line.trim().indexOf('scope:') == 0 && line.indexOf(options.scope) >= 0){
+
+                if (options && options.scope){
+                    if (line.trim().indexOf('scope:') == 0 && line.indexOf(options.scope) >= 0) {
                         scopeMatched = true;
                         return false;
                     }
-                }else{
+                } else {
                     scopeMatched = true;
                 }
-                if(line.trim().indexOf('scope:') == 0) {
+
+                if (line.trim().indexOf('scope:') == 0) {
                     return false;
                 }
                 return !pushLine(yamlLines, line); // end when lines stop being pushed
             }
+
             route = route || line.match(this.ROUTE_REGEX);
             return false;
         });
 
-        if (!scopeMatched){
+        if (!scopeMatched) {
             route = null;
         }
 

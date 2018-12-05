@@ -96,5 +96,15 @@ describe('Extractor', () => {
 
             assert.lengthOf(endpoints, 0);
         });
+
+        it('filters by scope matched by equality', () => {
+            const code = fs.readFileSync(`${__dirname}/fixtures/code/swagger-api.js`, 'utf-8');
+
+            const publicEndpoints = Extractor.extractEndpointsFromCode(code, { scope: 'public' });
+            assert.lengthOf(publicEndpoints, 1);
+
+            const authenticatedEndpoints = Extractor.extractEndpointsFromCode(code, { scope: 'authenticated' });
+            assert.lengthOf(authenticatedEndpoints, 2);
+        });
     });
 });

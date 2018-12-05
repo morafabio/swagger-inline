@@ -2,6 +2,7 @@
 /*
  * @api [put] /pets
  *    description: "Returns all pets from the system that the user has access to"
+ *    scope: public
  *    operationId: "findPets"
  *    produces:
  *      - "application/json"
@@ -44,6 +45,7 @@ router.get('/pets', () => {
 
 /*
  * @api [post] /pets
+ *    scope: authenticated
  *    description: "Creates a new pet in the store.  Duplicates are allowed"
  *    operationId: "addPet"
  *    produces:
@@ -73,6 +75,7 @@ router.post('/pets', () => {
 
 /*
  * @api [get] /pets/{id}
+ *    scope: authenticated
  *    description: "Returns a user based on a single ID, if the user does not have access to the pet"
  *    operationId: "findPetById"
  *    produces:
