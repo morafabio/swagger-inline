@@ -109,12 +109,15 @@ describe('Extractor', () => {
 
         it('filters by version using until and since constraint', () => {
             const code = fs.readFileSync(`${__dirname}/fixtures/code/swagger-api.js`, 'utf-8');
+
             const publicEndpointsWithUntil = Extractor.extractEndpointsFromCode(code, { version: '1.0' });
-            assert.lengthOf(publicEndpoints, 3);
+            assert.lengthOf(publicEndpointsWithUntil, 3);
+
             const publicEndpointsWithSinceAndUntil = Extractor.extractEndpointsFromCode(code, { version: '2.0' });
-            assert.lengthOf(publicEndpoints, 4);
+            assert.lengthOf(publicEndpointsWithSinceAndUntil, 4);
+
             const publicEndpointsWithSince = Extractor.extractEndpointsFromCode(code, { version: '3.0' });
-            assert.lengthOf(publicEndpoints, 3);
+            assert.lengthOf(publicEndpointsWithSince, 3);
         });
     });
 });
