@@ -105,6 +105,9 @@ describe('Extractor', () => {
 
             const authenticatedAndUnannotated = Extractor.extractEndpointsFromCode(code, { scope: 'authenticated' });
             assert.lengthOf(authenticatedAndUnannotated, 3);
+
+            const multiAnnotated = Extractor.extractEndpointsFromCode(code, { scope: 'public, authenticated' });
+            assert.lengthOf(multiAnnotated, 4);
         });
 
         it('filters by version using since', () => {
