@@ -109,6 +109,8 @@ router.get('/pets/{id}', () => {
 /*
  * @api [delete] /pets/{id}
  *    description: "deletes a single pet based on the ID supplied"
+ *    since: 1.5.0
+ *    until: 2.5.0
  *    operationId: "deletePet"
  *    parameters:
  *      -

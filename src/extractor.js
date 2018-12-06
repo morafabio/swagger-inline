@@ -25,6 +25,49 @@ function buildEndpoint(route, yamlLines) {
     return endpoint;
 }
 
+function isVersionDeclarationSince(line) {
+    return line.trim().includes('since:');
+}
+
+function isVersionDeclarationUntil(line) {
+    return line.trim().includes('until:');
+}
+
+function isVersionDeclaration(line) {
+    return isVersionDeclarationSince(line) || isVersionDeclarationUntil(line);
+}
+
+function isVersionDeclarationPassed(line, options) {
+
+    if (!isVersionDeclaration(line)) {
+        return true;
+    }
+
+    // @todo finish me!
+    const value = Number(line.split(':').pop(-1).trim());
+    const version = Number(options.version);
+
+    let passed = false;
+
+    if (isVersionDeclarationSince(line) && (version > value)) {
+        passed = true;
+    }
+
+    if (isVersionDeclarationUntil(line) && (version > value)) {
+        passed = false;
+    }
+
+    return passed;
+}
+
+function isScopeDeclaration(line) {
+    return line.trim().includes('scope:');
+}
+
+function isScopeDeclarationPassed(line, options) {
+    return isScopeDeclaration(line) && line.indexOf(options.scope) >= 0;
+}
+
 class Extractor {
     static extractEndpointsFromCode(code, options) {
         const comments = this.extractComments(code, options);
@@ -46,13 +89,14 @@ class Extractor {
         const yamlLines = [];
         let route = null;
         let scopeMatched = false;
+        let versionMatched = false;
 
         lines.some((line) => {
-
             if (route) {
-
-                if (options && options.scope){
-                    if (line.trim().indexOf('scope:') == 0 && line.indexOf(options.scope) >= 0) {
+                // @todo: refactor to reduce complexity (e.g. remove if)
+                // scope
+                if (options && options.scope) {
+                    if (isScopeDeclarationPassed(line, options)) {
                         scopeMatched = true;
                         return false;
                     }
@@ -60,9 +104,26 @@ class Extractor {
                     scopeMatched = true;
                 }
 
-                if (line.trim().indexOf('scope:') == 0) {
+                // version
+                if (options && options.version) {
+                    if (isVersionDeclarationPassed(line, options)) {
+                        versionMatched = true;
+                        return false;
+                    }
+                } else {
+                    versionMatched = true;
+                }
+
+                // drop line
+                if (isScopeDeclaration(line)) {
                     return false;
                 }
+
+                // drop line
+                if (isVersionDeclaration(line)) {
+                    return false;
+                }
+
                 return !pushLine(yamlLines, line); // end when lines stop being pushed
             }
 
@@ -71,6 +132,10 @@ class Extractor {
         });
 
         if (!scopeMatched) {
+            route = null;
+        }
+
+        if (!versionMatched) {
             route = null;
         }
 

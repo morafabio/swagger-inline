@@ -97,7 +97,7 @@ describe('Extractor', () => {
             assert.lengthOf(endpoints, 0);
         });
 
-        it('filters by scope matched by equality', () => {
+        it('filters by scope matching by name equality', () => {
             const code = fs.readFileSync(`${__dirname}/fixtures/code/swagger-api.js`, 'utf-8');
 
             const publicEndpoints = Extractor.extractEndpointsFromCode(code, { scope: 'public' });
@@ -105,6 +105,16 @@ describe('Extractor', () => {
 
             const authenticatedEndpoints = Extractor.extractEndpointsFromCode(code, { scope: 'authenticated' });
             assert.lengthOf(authenticatedEndpoints, 2);
+        });
+
+        it('filters by version using until and since constraint', () => {
+            const code = fs.readFileSync(`${__dirname}/fixtures/code/swagger-api.js`, 'utf-8');
+            const publicEndpointsWithUntil = Extractor.extractEndpointsFromCode(code, { version: '1.0' });
+            assert.lengthOf(publicEndpoints, 3);
+            const publicEndpointsWithSinceAndUntil = Extractor.extractEndpointsFromCode(code, { version: '2.0' });
+            assert.lengthOf(publicEndpoints, 4);
+            const publicEndpointsWithSince = Extractor.extractEndpointsFromCode(code, { version: '3.0' });
+            assert.lengthOf(publicEndpoints, 3);
         });
     });
 });
