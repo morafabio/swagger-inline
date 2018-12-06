@@ -27,13 +27,12 @@ class ValidatorVersion {
         }
 
         const current = this.getVersion(line);
-        if (this.isUntil(line) && semver.gte(current, target)) {
+        if (this.isUntil(line) && semver.satisfies(target, `<=${current}`)) {
             return true;
         }
-        if (this.isSince(line) && semver.lte(current, target)) {
+        if (this.isSince(line) && semver.satisfies(target, `>=${current}`)) {
             return true;
         }
-
         return false;
     }
 }

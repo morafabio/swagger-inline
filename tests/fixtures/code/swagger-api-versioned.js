@@ -20,8 +20,8 @@ router.get('/pets/{id}', () => {});
 
 /*
  * @api [delete] /pets/{id}
- *    since: 1.5.0
- *    until: 3.0.0
+ *    since: 1.5.x
+ *    until: 3.0.x
  *    operationId: "deletePet"
  */
 router.delete('/pets/{id}', () => {});

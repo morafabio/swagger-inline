@@ -38,12 +38,14 @@ describe('ValidatorVersion', () => {
 
     it('check constraints until', () => {
         assert.isTrue(ValidatorVersion.check('until: 1.5.1', '1.5.1'));
+        assert.isTrue(ValidatorVersion.check('until: 1.5.x', '1.5.5'));
         assert.isTrue(ValidatorVersion.check('until: 1.5.1', '1.5.0'));
         assert.isFalse(ValidatorVersion.check('until: 1.5.1', '1.5.2'));
     });
 
     it('check constraints since', () => {
         assert.isTrue(ValidatorVersion.check('since: 1.5.1', '1.5.1'));
+        assert.isTrue(ValidatorVersion.check('since: 1.5.x', '1.5.1'));
         assert.isTrue(ValidatorVersion.check('since: 1.5.1', '1.5.2'));
         assert.isFalse(ValidatorVersion.check('since: 1.5.1', '1.5.0'));
     });
