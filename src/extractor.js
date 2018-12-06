@@ -85,11 +85,7 @@ class Extractor {
             route = null;
         }
 
-        if (!untilVersionMatched) {
-            route = null;
-        }
-
-        if (!sinceVersionMatched) {
+        if (!untilVersionMatched || !sinceVersionMatched) {
             route = null;
         }
 
