@@ -10,12 +10,13 @@ function Cli(args) {
         .option('-b, --base [path]', 'A base swagger file.')
         .option('-o, --out [path]', 'Output file path.')
         .option('-f, --format [format]', 'Output swagger format (.json or .yaml).')
-        .option('-s, --scope [scope]', 'api scope to generate');
+        .option('-s, --scope [scope]', 'api scope to generate')
+        .option('-v, --version [version]', 'api version to generate');
 
     program.on('--help', () => {
         [
             'Example:',
-            '\tswagger-inline "./*.js" --base ./swaggerBase.json --out ./swagger.json --scope public',
+            '\tswagger-inline "./*.js" --base ./swaggerBase.json --out ./swagger.json --scope public --version 1.5',
         ].forEach((line) => console.log(line));
     });
 
@@ -31,6 +32,7 @@ function Cli(args) {
         format: program.format,
         out: program.out,
         scope: program.scope,
+        version: program.version,
         logger: console.log,
     };
 

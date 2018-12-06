@@ -36,7 +36,11 @@ class Options {
     getScope() {
         return this.options.scope;
     }
-    
+
+    getVersion() {
+        return this.options.scope;
+    }
+
     getLogger() {
         return this.options.logger;
     }

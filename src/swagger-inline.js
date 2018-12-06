@@ -72,6 +72,7 @@ function swaggerInline(globPatterns, providedOptions) {
                             {
                                 filename: fileInfo.fileName,
                                 scope: options.getScope(),
+                                version: options.getVersion(),
                             }
                         );
 
