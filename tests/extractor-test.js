@@ -107,17 +107,29 @@ describe('Extractor', () => {
             assert.lengthOf(authenticatedAndUnannotated, 3);
         });
 
-        // it('filters by version using until and since constraint', () => {
-        //     const code = fs.readFileSync(`${__dirname}/fixtures/code/swagger-api.js`, 'utf-8');
-        //
-        //     const publicEndpointsWithUntil = Extractor.extractEndpointsFromCode(code, { version: '1.0' });
-        //     assert.lengthOf(publicEndpointsWithUntil, 3);
-        //
-        //     const publicEndpointsWithSinceAndUntil = Extractor.extractEndpointsFromCode(code, { version: '2.0' });
-        //     assert.lengthOf(publicEndpointsWithSinceAndUntil, 4);
-        //
-        //     const publicEndpointsWithSince = Extractor.extractEndpointsFromCode(code, { version: '3.0' });
-        //     assert.lengthOf(publicEndpointsWithSince, 3);
-        // });
+        it('filters by version using since', () => {
+            const code = fs.readFileSync(`${__dirname}/fixtures/code/swagger-api-versioned.js`, 'utf-8');
+            const endpoints = Extractor.extractEndpointsFromCode(code, { version: '1.0.0' });
+            assert.lengthOf(endpoints, 2);
+            assert.equal(endpoints[0].method, 'put');
+            assert.equal(endpoints[1].method, 'get');
+        });
+
+        it('filters by version using until', () => {
+            const code = fs.readFileSync(`${__dirname}/fixtures/code/swagger-api-versioned.js`, 'utf-8');
+            const endpoints = Extractor.extractEndpointsFromCode(code, { version: '3.5.0' });
+            assert.lengthOf(endpoints, 2);
+            assert.equal(endpoints[0].method, 'put');
+            assert.equal(endpoints[1].method, 'post');
+        });
+
+        it('filters by version using until and since', () => {
+            const code = fs.readFileSync(`${__dirname}/fixtures/code/swagger-api-versioned.js`, 'utf-8');
+            const endpoints = Extractor.extractEndpointsFromCode(code, { version: '2.8.0' });
+            assert.lengthOf(endpoints, 3);
+            assert.equal(endpoints[0].method, 'put');
+            assert.equal(endpoints[1].method, 'post');
+            assert.equal(endpoints[2].method, 'delete');
+        });
     });
 });

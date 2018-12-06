@@ -1,8 +1,8 @@
 const extractComments = require('multilang-extract-comments');
-const semver = require('semver');
 const jsYaml = require('js-yaml');
 
 const ValidatorScope = require('./validator-scope');
+const ValidatorVersion = require('./validator-version');
 
 function pushLine(array, line) {
     if (line.trim()) {
@@ -48,17 +48,31 @@ class Extractor {
         const lines = comment.split('\n');
         const yamlLines = [];
         const scopeOptionEnabled = options && options.scope;
+        const versionOptionEnabled = options && options.version;
 
         let route = null;
         let scopeMatched = true;
+        let sinceVersionMatched = true;
+        let untilVersionMatched = true;
 
         lines.some((line) => {
             if (route) {
-                if (!scopeOptionEnabled) {
+                if (!scopeOptionEnabled && !versionOptionEnabled) {
                     return !pushLine(yamlLines, line);
                 }
-                if (ValidatorScope.isValid(line) && !ValidatorScope.check(line, options.scope)) {
-                    scopeMatched = false;
+
+                if (scopeOptionEnabled && ValidatorScope.isValid(line)) {
+                    scopeMatched = ValidatorScope.check(line, options.scope);
+                    return false;
+                }
+
+                if (versionOptionEnabled) {
+                    if (ValidatorVersion.isSince(line)) {
+                        sinceVersionMatched = ValidatorVersion.check(line, options.version);
+                    }
+                    if (ValidatorVersion.isUntil(line)) {
+                        untilVersionMatched = ValidatorVersion.check(line, options.version);
+                    }
                 }
                 return false;
             }
@@ -68,6 +82,14 @@ class Extractor {
         });
 
         if (!scopeMatched) {
+            route = null;
+        }
+
+        if (!untilVersionMatched) {
+            route = null;
+        }
+
+        if (!sinceVersionMatched) {
             route = null;
         }
 

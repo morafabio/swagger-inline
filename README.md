@@ -61,6 +61,7 @@ swagger-inline 'src/**/*.js' --base 'swaggerBase.json' # outputs built swagger.j
 - `metadata`: Add additional annotations to the Swagger file, prefixed with "x-si"
 - `ignore`: globs of files to ignore (by default, `['node_modules/**/*', ...etc]`,
 - `scope`: matches the scope field defined in each api (for example, `--scope public`... if not provided, all APIs' doc will be generated )
+- `version`: matches the version constraints defined in each api (for example, `--version 1.5`... if not provided, all APIs' doc will be generated )
 
 ## Example:
 

@@ -8,12 +8,12 @@ class ValidatorScope {
             return false;
         }
 
-        const scopes = scope.split(',');
-        if (!scopes || scopes.length === 0) {
+        const scopes = String(scope).split(',');
+        if (scopes.length === 0) {
             return false;
         }
 
-        for (let i = 0; i < scopes.length; i += 1) {
+        for (let i = 0; i < scopes.length; i++) {
             if (line.trim().includes(scopes[i])) {
                 return true;
             }
